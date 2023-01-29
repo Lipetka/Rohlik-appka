@@ -9,10 +9,10 @@ and save contents in dictionary
 
 import readPDFContents  # file that contains function to extract PDF text
 
-receipt_content = readPDFContents.getContents()   # enter filename or leave empty for default test file
+receipt_text    = readPDFContents.getContents()   # enter filename or leave empty for default test file
+bough_items_dictionary = receipt_items   = readPDFContents.extractOrderedItems(receipt_text) # enter receipt text and save output as dictionary
 
-
-
-
-
+# check total sum to verify skript
+total_sum = sum(bough_items_dictionary.values())
+print(total_sum)
 
