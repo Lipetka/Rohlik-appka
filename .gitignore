@@ -153,3 +153,8 @@ cython_debug/
 
 
 Ver.1/
+.vscode/
+Include/
+Lib/*
+Scripts/
+pyvenv.cfg
