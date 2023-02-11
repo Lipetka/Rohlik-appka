@@ -20,18 +20,20 @@ class Window(QMainWindow):
         self.main_widget = QWidget()
         self.main_widget_layout = QVBoxLayout()
         self.main_widget.setLayout(self.main_widget_layout)
-        self.setWindowTitle("Sam má obří pérko")
+        self.setWindowTitle("Rohlik.cz utility app")
 
         self.setMinimumSize(800, 600)
 
         # Load Receipts bar
         self.load_receipts_bar = QWidget()
+        self.load_receipts_bar.setStyleSheet("background-color: white")
         self.load_receipts_bar_layout = QHBoxLayout()
         self.load_receipts_bar.setLayout(self.load_receipts_bar_layout)
 
         self.path_to_file_lb = QLabel("File selected: " + self.backend.file_name)
 
         self.choose_file_btn = QPushButton("Choose file")
+        self.choose_file_btn.setStyleSheet("background-color: none")
         self.choose_file_btn.setMaximumWidth(120)
         self.choose_file_btn.clicked.connect(self.choose_file)
 
