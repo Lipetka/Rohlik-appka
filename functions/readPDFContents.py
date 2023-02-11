@@ -1,29 +1,29 @@
 import PyPDF2
 
 
-def getContents(file_name="Ver.2/files/pdfFileName.pdf"):
+def getContents(file_name="Ver.2/files/pdfFileName.pdf") -> str:
     # importing PDF file
 
     pdf_file_object = open(
         file_name, "rb"
     )  # open file name from GUI (dropdown or drag n drop)
-    pdf_read = PyPDF2.PdfFileReader(pdf_file_object)  # extract PDF contents
+    pdf_read = PyPDF2.PdfReader(pdf_file_object)  # extract PDF contents
 
-    page_count = pdf_read.numPages  # count pages to loop through them
+    page_count = len(pdf_read.pages)  # count pages to loop through them
 
     output_text = ""  # placeholder for text output
 
     for i in range(page_count):
         # loop through all pages and save the output to output_text variable
 
-        page = pdf_read.getPage(i)  # get nth page
-        output_text = output_text + page.extractText()  # read text and append it
+        page = pdf_read.pages[i]  # get nth page
+        output_text = output_text + page.extract_text()  # read text and append it
 
-    print(output_text + "\n\n")
+    # print(output_text + "\n\n")
     return output_text  # return output text
 
 
-def extractOrderedItems(receipt_text):
+def extractOrderedItems(receipt_text) -> dict:
     # this function extracts only bought items and saves them in dictionary
     # this functon is coded separately.
 
