@@ -9,10 +9,12 @@ class Backend(QObject):
         super().__init__()
         self.file_name: str = "None selected"
         self.items_wgt_container: QWidget
+        self.payment_info_label: QLabel
         self.bought_items: dict
-        self.n_customers: int = 4
+        self.n_customers: int = 3
         self.names: list[QLineEdit] = []
         self.customers: list[Customer] = []
+        self.is_items_wgt_filled:bool = False
 
     def scan_receipt(self):
         raw_receipt = readPDFContents.getContents(self.file_name)
@@ -47,12 +49,26 @@ class Backend(QObject):
 
     def _fill_items(self):
         for i, item in enumerate(self.bought_items):
+            self.items_wgt_container.layout().addWidget(QLabel(item), i + 1, 0)
+
+            # Get all line edits for the particular item from all customers
             customer_line_edits = [
                 customer.bought_portions_le[i] for customer in self.customers
             ]
-            self.items_wgt_container.layout().addWidget(QLabel(item), i + 1, 0)
-
             for j, line_edit in enumerate(customer_line_edits):
+                equal_portion = 1/len(self.customers)
+                line_edit.setText(f"{equal_portion:1.3f}")
                 self.items_wgt_container.layout().addWidget(
                     line_edit, i + 1, j + 1, Qt.AlignRight
                 )
+            
+        self.is_items_wgt_filled = True
+
+    def calculate_prices(self):
+        payment_string = ""
+        for customer in self.customers:
+            cost = customer.get_total_cost()
+            payment_string += f"{customer.name:.<18} {cost:5.2f}\n"
+
+        self.payment_info_label.setText(payment_string)
+
