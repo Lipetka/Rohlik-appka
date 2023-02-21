@@ -11,7 +11,7 @@ class Backend(QObject):
         self.items_wgt_container: QWidget
         self.payment_info_label: QLabel
         self.bought_items: dict
-        self.n_customers: int = 3
+        self.n_customers: int = 4
         self.names: list[QLineEdit] = []
         self.customers: list[Customer] = []
         self.is_items_wgt_filled:bool = False
@@ -68,7 +68,7 @@ class Backend(QObject):
         payment_string = ""
         for customer in self.customers:
             cost = customer.get_total_cost()
-            payment_string += f"{customer.name:.<18} {cost:5.2f}\n"
+            payment_string += f"{customer.name:.<18} {cost:5.2f} Kč\n"
 
         self.payment_info_label.setText(payment_string)
 

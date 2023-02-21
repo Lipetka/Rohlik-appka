@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
+    QLineEdit,
     QGridLayout,
     QFormLayout,
     QLabel,
@@ -29,11 +30,16 @@ class Window(QMainWindow):
         self.setMinimumSize(1000, 500)
         # self.showMaximized()
 
+        upper_bar = QWidget()
+        upper_bar.setLayout(QVBoxLayout())
         # Load Receipts bar
         load_receipts_bar = QWidget()
         load_receipts_bar.setStyleSheet("background-color: white")
         load_receipts_bar_layout = QHBoxLayout()
         load_receipts_bar.setLayout(load_receipts_bar_layout)
+        load_receipts_bar.setFixedHeight(50)
+        upper_bar.layout().addWidget(load_receipts_bar)
+
 
         self.path_to_file_lb = QLabel("File selected: " + self.backend.file_name)
 
@@ -52,7 +58,13 @@ class Window(QMainWindow):
         load_receipts_bar_layout.addWidget(choose_file_btn)
         load_receipts_bar_layout.addWidget(self.calculate_cost_btn)
 
-        load_receipts_bar.setFixedHeight(50)
+        # Additional settings bar
+        additional_settings = QWidget()
+        additional_settings.setLayout(QHBoxLayout())
+        additional_settings.setFixedHeight(50)
+        upper_bar.layout().addWidget(additional_settings)
+
+        people_n_le = QLineEdit()
         # =========================
         items_and_recap_wgt = QSplitter()
         items_and_recap_wgt.setLayout(QHBoxLayout())
@@ -70,10 +82,9 @@ class Window(QMainWindow):
         recap_widget = QWidget()
         recap_widget.setStyleSheet("background-color: white")
         recap_widget.setLayout(QVBoxLayout())
+        recap_widget.setMinimumWidth(300)
 
         to_pay_label = QLabel("To pay:")
-        to_pay_label.setMaximumHeight(50)
-        to_pay_label.setMinimumWidth(200)
 
         payment_info_label = QLabel()
         payment_info_label.setFont(QFont("Courier New", 12))
@@ -83,7 +94,7 @@ class Window(QMainWindow):
         recap_widget.layout().addStretch()
         items_and_recap_wgt.layout().addWidget(recap_widget)
 
-        main_widget_layout.addWidget(load_receipts_bar)
+        main_widget_layout.addWidget(upper_bar)
         main_widget_layout.addWidget(items_and_recap_wgt)
 
         self.backend.items_wgt_container = items_list_wgt
