@@ -10,11 +10,27 @@ class Backend(QObject):
         self.file_name: str = "None selected"
         self.items_wgt_container: QWidget
         self.payment_info_label: QLabel
+        self.customers_n_le: QLineEdit
         self.bought_items: dict
-        self.n_customers: int = 4
+        self._n_customers: int = 4
         self.names: list[QLineEdit] = []
         self.customers: list[Customer] = []
-        self.is_items_wgt_filled:bool = False
+        self.is_items_wgt_filled: bool = False
+
+    # Getter/setter defined for future use perhaps??
+    @property
+    def n_customers(self):
+        return self._n_customers
+
+    @n_customers.setter
+    def n_customers(self, number):
+        self.clear_layout(self.items_wgt_container.layout())
+        self.customers = []
+        try:
+            self._n_customers = int(number)
+            self.customers_n_le.setText(str(self.n_customers))
+        except ValueError:
+            self._n_customers = 1
 
     def scan_receipt(self):
         raw_receipt = readPDFContents.getContents(self.file_name)
@@ -41,7 +57,7 @@ class Backend(QObject):
         """Create a header with names"""
         items_label = QLabel("Items")
         self.items_wgt_container.layout().addWidget(items_label, 0, 0)
-        for i in range(self.n_customers):
+        for i in range(self._n_customers):
             self.customers.append(Customer(f"Name {i}", self.bought_items))
             self.items_wgt_container.layout().addWidget(
                 self.customers[i].name_le, 0, i + 1
@@ -56,12 +72,12 @@ class Backend(QObject):
                 customer.bought_portions_le[i] for customer in self.customers
             ]
             for j, line_edit in enumerate(customer_line_edits):
-                equal_portion = 1/len(self.customers)
+                equal_portion = 1 / len(self.customers)
                 line_edit.setText(f"{equal_portion:1.3f}")
                 self.items_wgt_container.layout().addWidget(
                     line_edit, i + 1, j + 1, Qt.AlignRight
                 )
-            
+
         self.is_items_wgt_filled = True
 
     def calculate_prices(self):
@@ -72,3 +88,16 @@ class Backend(QObject):
 
         self.payment_info_label.setText(payment_string)
 
+    def set_n_customers(self, number):
+        self.n_customers = number
+
+    # Ref: https://stackoverflow.com/questions/9374063/remove-all-items-from-a-layout
+    def clear_layout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.clear_layout(item.layout())

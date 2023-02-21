@@ -25,7 +25,7 @@ class Customer:
             if not bought_portion_le.text():
                 value = 0.0
             else:
-                value = float(bought_portion_le.text())*item_prices[i]
+                value = float(bought_portion_le.text()) * item_prices[i]
             total_cost += value
 
         return total_cost
@@ -38,5 +38,3 @@ class Customer:
     def name(self, new_name):
         self._name = new_name
         self.name_le.setText(self._name)
-
-        
